@@ -2,7 +2,7 @@ from tkinter import BOTH, Tk, Canvas
 
 
 class Point:
-    def __init__(self, x, y):
+    def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
 
@@ -22,14 +22,13 @@ class Line:
 
 
 class Window:
-    def __init__(self, width, height):
+    def __init__(self, width: int, height: int):
         self.__root = Tk()
         self.__root.title("MazeQuest")
         self.__canvas = Canvas(
             self.__root,
             width=width,
             height=height,
-            bg="white"
         )
         self.__canvas.pack(fill=BOTH, expand=1)
         self.__running = False
