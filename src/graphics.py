@@ -22,13 +22,15 @@ class Line:
 
 
 class Window:
-    def __init__(self, width: int, height: int):
+    def __init__(self, width: int, height: int, bg="#333332"):
+        self.bg = bg
         self.__root = Tk()
         self.__root.title("MazeQuest")
         self.__canvas = Canvas(
             self.__root,
             width=width,
             height=height,
+            bg=bg
         )
         self.__canvas.pack(fill=BOTH, expand=1)
         self.__running = False
