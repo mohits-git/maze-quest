@@ -1,7 +1,8 @@
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 from cell import Cell
 from graphics import Window
 from time import sleep
+from queue import PriorityQueue
 import random
 
 
@@ -159,8 +160,8 @@ class Maze:
         self._animate()
         self._cells[i][j].visited = True
 
-        dr = [1, 0, -1, 0]
-        dc = [0, 1, 0, -1]
+        dr = [-1, 0, 1, 0]
+        dc = [0, -1, 0, 1]
         for k in range(0, 4):
             if (
                 dr[k] + i >= 0
@@ -200,7 +201,8 @@ class Maze:
                 )
                 self._animate(0.1)
             if i == self._num_rows - 1 and j == self._num_cols - 1:
-                return self._draw_path(path + [(i, j)])
+                self._draw_path(path + [(i, j)])
+                return True
             self._cells[i][j].visited = True
             dr = [-1, 0, 1, 0]
             dc = [0, -1, 0, 1]
@@ -228,3 +230,72 @@ class Maze:
 
     def solve_bfs(self):
         return self._solve_via_bfs()
+
+    def _solve_via_a_star(self):
+        start_cell = (0, 0)
+        end_cell = (self._num_rows-1, self._num_cols-1)
+
+        def _h(cell1: Tuple[int, int], cell2: Tuple[int, int] = end_cell):
+            return abs(cell1[0] - cell2[0]) + abs(cell1[1] - cell2[1])
+
+        def _build_path(path_map: Dict):
+            cell = end_cell
+            path: List[Tuple[int, int]] = [cell]
+            while cell != start_cell:
+                path.append(path_map[cell])
+                cell = path_map[cell]
+            return path[::-1]
+
+        cells = []
+        for i in range(self._num_rows):
+            for j in range(self._num_cols):
+                cells.append((i, j))
+
+        g_score = {cell: float('inf') for cell in cells}
+        g_score[start_cell] = 0
+        f_score = {cell: float('inf') for cell in cells}
+        f_score[start_cell] = _h(start_cell)
+
+        path_map = {}
+
+        pq = PriorityQueue()
+        pq.put((f_score[start_cell], f_score[start_cell], start_cell))
+
+        while not pq.empty():
+            current_cell = pq.get()[2]
+
+            if current_cell == end_cell:
+                path = _build_path(path_map)
+                self._draw_path(path)
+                return True
+
+            dr = [-1, 0, 1, 0]
+            dc = [0, -1, 0, 1]
+            for k in range(4):
+                nr = dr[k] + current_cell[0]
+                nc = dc[k] + current_cell[1]
+                if (
+                    nr >= 0
+                    and nr < self._num_rows
+                    and nc >= 0
+                    and nc < self._num_cols
+                    and self.__can_move(
+                        current_cell[0], current_cell[1], nr, nc)
+                ):
+                    new_cell = (nr, nc)
+                    new_g_score = g_score[current_cell] + 1
+                    new_f_scroe = new_g_score + _h(new_cell)
+                    if new_f_scroe < f_score[new_cell]:
+                        f_score[new_cell] = new_f_scroe
+                        g_score[new_cell] = new_g_score
+                        pq.put((new_f_scroe, _h(new_cell), new_cell))
+                        path_map[new_cell] = current_cell
+                        self._cells[new_cell[0]][new_cell[1]].draw_move(
+                            self._cells[current_cell[0]][current_cell[1]],
+                            undo=True
+                        )
+                        self._animate(0.08)
+        return False
+
+    def solve_a_star(self):
+        return self._solve_via_a_star()

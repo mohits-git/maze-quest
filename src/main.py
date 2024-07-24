@@ -49,6 +49,16 @@ def main():
         }
     )
 
+    solve_a_star_btn = win.add_button(
+        frm,
+        "Solve with A* search algorithm",
+        maze.solve_a_star,
+        pack_options={
+            "ipadx": 10,
+            "ipady": 5,
+        }
+    )
+
     def create_new_maze():
         global maze
         win.clear_canvas()
@@ -60,11 +70,13 @@ def main():
         )
         solve_btn.configure(command=maze.solve)
         solve_bfs_btn.configure(command=maze.solve_bfs)
+        solve_a_star_btn.configure(command=maze.solve_a_star)
 
     win.add_button(
         frm,
-        "Next Maze",
+        "New Maze",
         create_new_maze,
+        fg="#333333",
         pack_options={
             "ipadx": 10,
             "ipady": 5,
