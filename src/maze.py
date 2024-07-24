@@ -30,6 +30,7 @@ class Maze:
         if seed is not None:
             random.seed(seed)
         self._break_walls_r(0, 0)
+        self._write_enter_exit()
         self._reset_cells_visited()
 
     def _create_cells(self):
@@ -103,6 +104,21 @@ class Maze:
                 self._cells[i][direction[1]].has_left_wall = False
 
             self._break_walls_r(direction[0], direction[1])
+
+    def _write_enter_exit(self):
+        if self._win is None:
+            return
+        self._win.write_text(
+            self._x + (self._cell_size_x//2),
+            self._y,
+            "ENTER"
+        )
+        self._win.write_text(
+            self._x + self._cell_size_x *
+            self._num_cols - (self._cell_size_x//2),
+            self._y + self._cell_size_y * self._num_rows,
+            "EXIT"
+        )
 
     def _reset_cells_visited(self):
         for i in range(0, self._num_rows):

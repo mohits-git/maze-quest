@@ -60,6 +60,15 @@ class Window:
         color = self.color if fill_color is None else fill_color
         line.draw(self.__canvas, color)
 
+    def write_text(self, x: int, y: int, text: str, **kwargs):
+        self.__canvas.create_text(
+            x,
+            y,
+            text=text,
+            justify=CENTER,
+            **kwargs,
+        )
+
     def add_title(self, text):
         frm = self.add_frame(
             height=50,
