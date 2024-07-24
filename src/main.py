@@ -29,10 +29,31 @@ def main():
         win,
     )
 
-    win.add_button(
+    solve_btn = win.add_button(
         frm,
         "Solve with DFS algorithm",
         maze.solve,
+        pack_options={
+            "ipadx": 10,
+            "ipady": 5,
+        }
+    )
+
+    def create_new_maze():
+        global maze
+        win.clear_canvas()
+        maze = Maze(
+            margin, margin,
+            num_rows, num_cols,
+            cell_size_x, cell_size_y,
+            win,
+        )
+        solve_btn.configure(command=maze.solve)
+
+    win.add_button(
+        frm,
+        "Next Maze",
+        create_new_maze,
         pack_options={
             "ipadx": 10,
             "ipady": 5,

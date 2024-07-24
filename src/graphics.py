@@ -43,6 +43,9 @@ class Window:
         self.__running = False
         self.__root.protocol('WM_DELETE_WINDOW', self.close)
 
+    def clear_canvas(self):
+        self.__canvas.delete("all")
+
     def redraw(self):
         self.__root.update_idletasks()
         self.__root.update()
