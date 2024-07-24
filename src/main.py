@@ -1,4 +1,3 @@
-from tkinter import Button
 from graphics import Window
 from maze import Maze
 
@@ -17,11 +16,11 @@ def main():
         pady=10
     )
 
-    margin = 50
+    margin = 25
     num_rows = 10
     num_cols = 12
     cell_size_x = (window_width - margin*2)//num_cols
-    cell_size_y = (window_height - margin)//num_rows
+    cell_size_y = (window_height - margin*2)//num_rows
 
     maze = Maze(
         margin, margin,
@@ -35,7 +34,6 @@ def main():
         "Solve with DFS algorithm",
         maze.solve,
         pack_options={
-            "pady": 10,
             "ipadx": 10,
             "ipady": 5,
         }

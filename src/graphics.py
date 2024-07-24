@@ -1,4 +1,4 @@
-from tkinter import CENTER, Button, Frame, Tk, Canvas
+from tkinter import CENTER, Button, Frame, Label, Tk, Canvas
 from typing import Callable
 
 
@@ -61,13 +61,26 @@ class Window:
         line.draw(self.__canvas, color)
 
     def add_title(self, text):
-        self.__canvas.create_text(
-            400,
-            20,
-            text=text,
-            justify=CENTER,
-            font=("Sans-serif", 30, "bold")
+        frm = self.add_frame(
+            height=50,
+            pady=10,
+            pack_options={
+                "before": self.__canvas
+            }
         )
+        label = Label(
+            frm,
+            text=text,
+            font=("Sans-serif", 30, "bold"),
+            justify=CENTER,
+            bg=self.bg,
+            highlightbackground=self.bg
+        )
+        label.pack(
+            fill="x",
+            expand=1
+        )
+        return label
 
     def add_frame(self, height: int, **kwargs):
         pack_options = kwargs.pop("pack_options", {})
