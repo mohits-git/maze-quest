@@ -108,3 +108,62 @@ class Maze:
         for i in range(0, self._num_rows):
             for j in range(0, self._num_cols):
                 self._cells[i][j].visited = False
+
+    def __can_move(self, i, j, x, y):
+        if (
+            x > i
+            and not self._cells[i][j].has_bottom_wall
+            and not self._cells[x][j].has_top_wall
+        ):
+            return True
+        elif (
+            x < i
+            and not self._cells[i][j].has_top_wall
+            and not self._cells[x][j].has_bottom_wall
+        ):
+            return True
+        elif (
+            y < j
+            and not self._cells[i][j].has_left_wall
+            and not self._cells[i][y].has_right_wall
+        ):
+            return True
+        elif (
+            y > j
+            and not self._cells[i][j].has_right_wall
+            and not self._cells[i][y].has_left_wall
+        ):
+            return True
+        else:
+            return False
+
+    def _solve_r(self, i: int, j: int):
+        if i == self._num_rows - 1 and j == self._num_cols - 1:
+            return True
+        self._animate()
+        self._cells[i][j].visited = True
+
+        dr = [-1, 0, 1, 0]
+        dc = [0, -1, 0, 1]
+        for k in range(0, 4):
+            if (
+                dr[k] + i >= 0
+                and dr[k] + i < self._num_rows
+                and dc[k] + j >= 0
+                and dc[k] + j < self._num_cols
+                and not self._cells[dr[k] + i][dc[k] + j].visited
+                and self.__can_move(i, j, i+dr[k], j+dc[k])
+            ):
+                self._cells[i][j].draw_move(self._cells[dr[k]+i][dc[k]+j])
+                if self._solve_r(dr[k]+i, dc[k]+j):
+                    return True
+                else:
+                    self._cells[i][j].draw_move(
+                        self._cells[dr[k]+i][dc[k]+j],
+                        undo=True
+                    )
+                    self._animate()
+        return False
+
+    def solve(self):
+        return self._solve_r(0, 0)

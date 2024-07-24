@@ -13,13 +13,15 @@ def main():
     cell_size_x = (window_width - margin*2)//num_cols
     cell_size_y = (window_height - margin*2)//num_rows
 
-    Maze(
+    maze = Maze(
         margin, margin,
         num_rows, num_cols,
         cell_size_x, cell_size_y,
         win,
-        seed=0
+        seed=10
     )
+
+    maze.solve()
 
     win.wait_for_close()
 
