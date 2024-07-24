@@ -25,7 +25,6 @@ class Maze:
         self._cell_size_y = cell_size_y
         self._win = win
         self._cells: List[List[Cell]] = []
-        self._visited: List[List[bool]] = []
         self._create_cells()
         self._break_entrance_and_exit()
         if seed is not None:
@@ -36,10 +35,8 @@ class Maze:
     def _create_cells(self):
         for i in range(0, self._num_rows):
             self._cells.append([])
-            self._visited.append([])
             for j in range(0, self._num_cols):
                 self._cells[i].append(Cell(self._win))
-                self._visited[i].append(False)
 
         for i in range(0, self._num_rows):
             for j in range(0, self._num_cols):
@@ -68,7 +65,7 @@ class Maze:
         self._draw_cell(self._num_rows-1, self._num_cols-1)
 
     def _break_walls_r(self, i, j):
-        self._visited[i][j] = True
+        self._cells[i][j].visited = True
         while True:
             row = [-1, 0, 1, 0]
             col = [0, -1, 0, 1]
@@ -80,7 +77,7 @@ class Maze:
                         and row[k] + i < self._num_rows
                         and col[k] + j >= 0
                         and col[k] + j < self._num_cols
-                        and not self._visited[row[k] + i][col[k] + j]
+                        and not self._cells[row[k] + i][col[k] + j].visited
                 ):
                     possible_directions.append([row[k]+i, col[k] + j])
 
@@ -110,4 +107,4 @@ class Maze:
     def _reset_cells_visited(self):
         for i in range(0, self._num_rows):
             for j in range(0, self._num_cols):
-                self._visited[i][j] = False
+                self._cells[i][j].visited = False

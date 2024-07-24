@@ -33,15 +33,12 @@ class TestMaze(unittest.TestCase):
         num_cols = 12
         num_rows = 10
         m1 = Maze(0, 0, num_rows, num_cols, 10, 10, seed=0)
-        expected_visited = []
         for i in range(0, num_rows):
-            expected_visited.append([])
             for j in range(0, num_cols):
-                expected_visited[i].append(False)
-        self.assertEqual(
-            m1._visited,
-            expected_visited
-        )
+                self.assertEqual(
+                    m1._cells[i][j].visited,
+                    False
+                )
 
 
 if __name__ == "__main__":
