@@ -90,17 +90,17 @@ class Maze:
             )]
 
             if direction[0] > i:
-                self._cells[i][j].has_right_wall = False
-                self._cells[direction[0]][j].has_left_wall = False
-            elif direction[0] < i:
-                self._cells[i][j].has_left_wall = False
-                self._cells[direction[0]][j].has_right_wall = False
-            elif direction[1] < j:
-                self._cells[i][j].has_top_wall = False
-                self._cells[i][direction[1]].has_bottom_wall = False
-            elif direction[1] > j:
                 self._cells[i][j].has_bottom_wall = False
-                self._cells[i][direction[1]].has_top_wall = False
+                self._cells[direction[0]][j].has_top_wall = False
+            elif direction[0] < i:
+                self._cells[i][j].has_top_wall = False
+                self._cells[direction[0]][j].has_bottom_wall = False
+            elif direction[1] < j:
+                self._cells[i][j].has_left_wall = False
+                self._cells[i][direction[1]].has_right_wall = False
+            elif direction[1] > j:
+                self._cells[i][j].has_right_wall = False
+                self._cells[i][direction[1]].has_left_wall = False
 
             self._break_walls_r(direction[0], direction[1])
 
