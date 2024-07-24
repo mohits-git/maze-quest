@@ -5,7 +5,7 @@ from maze import Maze
 def main():
     window_width = 800
     window_height = 600
-    win = Window(width=window_width, height=600)
+    win = Window(width=window_width, height=600, bg="black", color="white")
 
     margin = 50
     num_rows = 10

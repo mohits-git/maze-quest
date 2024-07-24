@@ -22,8 +22,9 @@ class Line:
 
 
 class Window:
-    def __init__(self, width: int, height: int, bg="#333332"):
+    def __init__(self, width: int, height: int, bg="#333332", color="black"):
         self.bg = bg
+        self.color = color
         self.__root = Tk()
         self.__root.title("MazeQuest")
         self.__canvas = Canvas(
@@ -49,5 +50,6 @@ class Window:
     def close(self):
         self.__running = False
 
-    def draw_line(self, line: Line, fill_color: str = "black"):
-        line.draw(self.__canvas, fill_color)
+    def draw_line(self, line: Line, fill_color: str | None = None):
+        color = self.color if fill_color is None else fill_color
+        line.draw(self.__canvas, color)
