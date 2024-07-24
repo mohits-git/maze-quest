@@ -40,9 +40,9 @@ class Maze:
 
         for i in range(0, self._num_rows):
             for j in range(0, self._num_cols):
-                self._draw_cell(i, j)
+                self._draw_cell(i, j, 0.01)
 
-    def _draw_cell(self, i: int, j: int):
+    def _draw_cell(self, i: int, j: int, animation_speed=0.05):
         if self._win is None:
             return
         x1 = self._x + self._cell_size_x * (j)
@@ -50,13 +50,13 @@ class Maze:
         x2 = self._x + self._cell_size_x * (j+1)
         y2 = self._y + self._cell_size_y * (i+1)
         self._cells[i][j].draw(x1, y1, x2, y2)
-        self._animate()
+        self._animate(animation_speed)
 
-    def _animate(self):
+    def _animate(self, animation_speed=0.05):
         if self._win is None:
             return
         self._win.redraw()
-        sleep(0.05)
+        sleep(animation_speed)
 
     def _break_entrance_and_exit(self):
         self._cells[0][0].has_top_wall = False
@@ -82,7 +82,7 @@ class Maze:
                     possible_directions.append([row[k]+i, col[k] + j])
 
             if len(possible_directions) == 0:
-                self._draw_cell(i, j)
+                self._draw_cell(i, j, 0.03)
                 return
 
             direction = possible_directions[int(
@@ -162,7 +162,7 @@ class Maze:
                         self._cells[dr[k]+i][dc[k]+j],
                         undo=True
                     )
-                    self._animate()
+                    self._animate(0.08)
         return False
 
     def solve(self):

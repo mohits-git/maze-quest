@@ -18,7 +18,6 @@ def main():
         num_rows, num_cols,
         cell_size_x, cell_size_y,
         win,
-        seed=10
     )
 
     maze.solve()
