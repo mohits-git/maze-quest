@@ -143,8 +143,8 @@ class Maze:
         self._animate()
         self._cells[i][j].visited = True
 
-        dr = [-1, 0, 1, 0]
-        dc = [0, -1, 0, 1]
+        dr = [1, 0, -1, 0]
+        dc = [0, 1, 0, -1]
         for k in range(0, 4):
             if (
                 dr[k] + i >= 0
