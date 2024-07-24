@@ -2,7 +2,7 @@ import unittest
 from maze import Maze
 
 
-class Tests(unittest.TestCase):
+class TestMaze(unittest.TestCase):
     def test_maze_create_cells(self):
         num_cols = 12
         num_rows = 10
@@ -27,6 +27,20 @@ class Tests(unittest.TestCase):
         self.assertEqual(
             m1._cells[num_rows - 1][num_cols - 1].has_bottom_wall,
             False
+        )
+
+    def test_reset_cells_visited(self):
+        num_cols = 12
+        num_rows = 10
+        m1 = Maze(0, 0, num_rows, num_cols, 10, 10, seed=0)
+        expected_visited = []
+        for i in range(0, num_rows):
+            expected_visited.append([])
+            for j in range(0, num_cols):
+                expected_visited[i].append(False)
+        self.assertEqual(
+            m1._visited,
+            expected_visited
         )
 
 
