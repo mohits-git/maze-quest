@@ -1,4 +1,5 @@
-from tkinter import BOTH, Tk, Canvas
+from tkinter import CENTER, Button, Frame, Tk, Canvas
+from typing import Callable
 
 
 class Point:
@@ -27,13 +28,18 @@ class Window:
         self.color = color
         self.__root = Tk()
         self.__root.title("MazeQuest")
+        self.__root.configure(background=bg)
         self.__canvas = Canvas(
             self.__root,
             width=width,
             height=height,
-            bg=bg
+            bg=bg,
+            highlightbackground=bg
         )
-        self.__canvas.pack(fill=BOTH, expand=1)
+        self.__canvas.pack(
+            fill="x",
+            expand=1
+        )
         self.__running = False
         self.__root.protocol('WM_DELETE_WINDOW', self.close)
 
@@ -53,3 +59,43 @@ class Window:
     def draw_line(self, line: Line, fill_color: str | None = None):
         color = self.color if fill_color is None else fill_color
         line.draw(self.__canvas, color)
+
+    def add_title(self, text):
+        self.__canvas.create_text(
+            400,
+            20,
+            text=text,
+            justify=CENTER,
+            font=("Sans-serif", 30, "bold")
+        )
+
+    def add_frame(self, height: int, **kwargs):
+        pack_options = kwargs.pop("pack_options", {})
+        bg = kwargs.pop("bg") if "bg" in kwargs else self.bg
+        frm = Frame(
+            self.__root,
+            height=height,
+            bg=bg,
+            **kwargs
+        )
+        frm.pack(
+            fill="x",
+            expand=1,
+            **pack_options
+        )
+        return frm
+
+    def add_button(self, parent, text: str, command: Callable, **kwargs):
+        pack_options = kwargs.pop("pack_options", {})
+        bg = kwargs.pop("bg") if "bg" in kwargs else self.bg
+        btn = Button(
+            parent,
+            text=text,
+            command=command,
+            bg=bg,
+            **kwargs
+        )
+        btn.pack(
+            **pack_options
+        )
+        return btn
