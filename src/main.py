@@ -39,6 +39,16 @@ def main():
         }
     )
 
+    solve_bfs_btn = win.add_button(
+        frm,
+        "Solve with BFS algorithm",
+        maze.solve_bfs,
+        pack_options={
+            "ipadx": 10,
+            "ipady": 5,
+        }
+    )
+
     def create_new_maze():
         global maze
         win.clear_canvas()
@@ -49,6 +59,7 @@ def main():
             win,
         )
         solve_btn.configure(command=maze.solve)
+        solve_bfs_btn.configure(command=maze.solve_bfs)
 
     win.add_button(
         frm,

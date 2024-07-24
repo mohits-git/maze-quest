@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 from cell import Cell
 from graphics import Window
 from time import sleep
@@ -183,3 +183,45 @@ class Maze:
 
     def solve(self):
         return self._solve_r(0, 0)
+
+    def _solve_via_bfs(self):
+        que: List[Tuple[List[int], List[List[int]]]] = []
+        que.append(([0, 0], []))
+        while len(que) > 0:
+            item = que.pop(0)
+            i, j = item[0][0], item[0][1]
+            path = item[1]
+            pathlen = len(path)
+            if pathlen > 0:
+                self._cells[i][j].draw_move(
+                    self._cells[path[pathlen-1][0]][path[pathlen-1][1]],
+                    undo=True
+                )
+                self._animate(0.1)
+            if i == self._num_rows - 1 and j == self._num_cols - 1:
+                return self._draw_path(path + [[i, j]])
+            self._cells[i][j].visited = True
+            dr = [1, 0, -1, 0]
+            dc = [0, 1, 0, -1]
+            for k in range(0, 4):
+                if (
+                    dr[k] + i >= 0
+                    and dr[k] + i < self._num_rows
+                    and dc[k] + j >= 0
+                    and dc[k] + j < self._num_cols
+                    and not self._cells[dr[k] + i][dc[k] + j].visited
+                    and self.__can_move(i, j, i+dr[k], j+dc[k])
+                ):
+                    indexes = [dr[k]+i, dc[k]+j]
+                    que.append((indexes, path + [[i, j]]))
+        return False
+
+    def _draw_path(self, path: List[List[int]]):
+        for i in range(len(path)-1):
+            self._cells[path[i+1][0]][path[i+1][1]].draw_move(
+                self._cells[path[i][0]][path[i][1]]
+            )
+            self._animate(0.015)
+
+    def solve_bfs(self):
+        return self._solve_via_bfs()
