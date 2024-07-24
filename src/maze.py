@@ -45,10 +45,10 @@ class Maze:
     def _draw_cell(self, i: int, j: int):
         if self._win is None:
             return
-        x1 = self._x * (j+1)
-        y1 = self._y * (i+1)
-        x2 = self._x * (j+1) + self._cell_size_x
-        y2 = self._y * (i+1) + self._cell_size_y
+        x1 = self._x + self._cell_size_x * (j)
+        y1 = self._y + self._cell_size_y * (i)
+        x2 = self._x + self._cell_size_x * (j+1)
+        y2 = self._y + self._cell_size_y * (i+1)
         self._cells[i][j].draw(x1, y1, x2, y2)
         self._animate()
 

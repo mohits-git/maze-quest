@@ -3,13 +3,21 @@ from maze import Maze
 
 
 def main():
-    win = Window(width=800, height=600)
+    window_width = 800
+    window_height = 600
+    win = Window(width=window_width, height=600)
+
+    margin = 50
+    num_rows = 10
+    num_cols = 12
+    cell_size_x = (window_width - margin*2)//num_cols
+    cell_size_y = (window_height - margin*2)//num_rows
 
     Maze(
-        x=50, y=50,
-        num_rows=10, num_cols=12,
-        cell_size_x=50, cell_size_y=50,
-        win=win,
+        margin, margin,
+        num_rows, num_cols,
+        cell_size_x, cell_size_y,
+        win,
         seed=0
     )
 
