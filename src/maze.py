@@ -185,38 +185,41 @@ class Maze:
         return self._solve_r(0, 0)
 
     def _solve_via_bfs(self):
-        que: List[Tuple[List[int], List[List[int]]]] = []
-        que.append(([0, 0], []))
+        que: List[Tuple[Tuple[int, int], List[Tuple[int, int]]]] = []
+        que.append(((0, 0), []))
         while len(que) > 0:
             item = que.pop(0)
             i, j = item[0][0], item[0][1]
             path = item[1]
             pathlen = len(path)
             if pathlen > 0:
+                prev_cell_ind = path[pathlen-1]
                 self._cells[i][j].draw_move(
-                    self._cells[path[pathlen-1][0]][path[pathlen-1][1]],
+                    self._cells[prev_cell_ind[0]][prev_cell_ind[1]],
                     undo=True
                 )
                 self._animate(0.1)
             if i == self._num_rows - 1 and j == self._num_cols - 1:
-                return self._draw_path(path + [[i, j]])
+                return self._draw_path(path + [(i, j)])
             self._cells[i][j].visited = True
-            dr = [1, 0, -1, 0]
-            dc = [0, 1, 0, -1]
-            for k in range(0, 4):
+            dr = [-1, 0, 1, 0]
+            dc = [0, -1, 0, 1]
+            for k in range(4):
+                nr = dr[k] + i
+                nc = dc[k] + j
                 if (
-                    dr[k] + i >= 0
-                    and dr[k] + i < self._num_rows
-                    and dc[k] + j >= 0
-                    and dc[k] + j < self._num_cols
-                    and not self._cells[dr[k] + i][dc[k] + j].visited
-                    and self.__can_move(i, j, i+dr[k], j+dc[k])
+                    nr >= 0
+                    and nr < self._num_rows
+                    and nc >= 0
+                    and nc < self._num_cols
+                    and not self._cells[nr][nc].visited
+                    and self.__can_move(i, j, nr, nc)
                 ):
-                    indexes = [dr[k]+i, dc[k]+j]
-                    que.append((indexes, path + [[i, j]]))
+                    indexes = (nr, nc)
+                    que.append((indexes, path + [(i, j)]))
         return False
 
-    def _draw_path(self, path: List[List[int]]):
+    def _draw_path(self, path: List[Tuple[int, int]]):
         for i in range(len(path)-1):
             self._cells[path[i+1][0]][path[i+1][1]].draw_move(
                 self._cells[path[i][0]][path[i][1]]
