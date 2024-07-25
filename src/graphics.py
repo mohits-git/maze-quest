@@ -1,4 +1,4 @@
-from tkinter import CENTER, Button, Frame, Label, Tk, Canvas
+from tkinter import CENTER, LEFT, Button, Entry, Frame, Label, Tk, Canvas
 from typing import Callable
 
 
@@ -124,3 +124,58 @@ class Window:
             **pack_options
         )
         return btn
+
+    def add_size_input(self, parent, **kwargs):
+        pack_options = kwargs.pop("pack_options", {})
+        bg = kwargs.pop("bg") if "bg" in kwargs else self.bg
+        frm = Frame(
+            parent,
+            bg=bg
+        )
+        frm.pack(
+            fill='x',
+            expand=1
+        )
+        lbl = Label(
+            frm,
+            text="size",
+            font=("Sans-serif", 18, "italic"),
+            bg=bg,
+        )
+        lbl.pack(
+            side=LEFT,
+            ipadx=5,
+            ipady=10
+        )
+        row = Entry(
+            frm,
+            bg=bg,
+            width=3,
+            **kwargs
+        )
+        row.pack(
+            side=LEFT,
+            **pack_options
+        )
+        lbl2 = Label(
+            frm,
+            text="x",
+            font=("Sans-serif", 18),
+            bg=bg,
+        )
+        lbl2.pack(
+            side=LEFT,
+            ipadx=5,
+            ipady=10
+        )
+        column = Entry(
+            frm,
+            bg=bg,
+            width=3,
+            **kwargs
+        )
+        column.pack(
+            side=LEFT,
+            **pack_options
+        )
+        return row, column

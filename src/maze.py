@@ -42,7 +42,7 @@ class Maze:
 
         for i in range(0, self._num_rows):
             for j in range(0, self._num_cols):
-                self._draw_cell(i, j, 0.01)
+                self._draw_cell(i, j, 0.001)
 
     def _draw_cell(self, i: int, j: int, animation_speed=0.05):
         if self._win is None:
@@ -84,7 +84,7 @@ class Maze:
                     possible_directions.append([row[k]+i, col[k] + j])
 
             if len(possible_directions) == 0:
-                self._draw_cell(i, j, 0.03)
+                self._draw_cell(i, j, 0.001)
                 return
 
             direction = possible_directions[int(
