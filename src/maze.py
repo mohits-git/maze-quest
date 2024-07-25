@@ -185,25 +185,43 @@ class Maze:
     def solve(self):
         return self._solve_r(0, 0)
 
+    def _build_path(
+            self,
+            path_map: Dict,
+            start_cell: Tuple[int, int] = (0, 0),
+            end_cell: Tuple[int, int] | None = None
+    ):
+        if end_cell is None:
+            end_cell = (self._num_rows-1, self._num_cols-1)
+        cell = end_cell
+        path: List[Tuple[int, int]] = [cell]
+        while cell != start_cell:
+            path.append(path_map[cell])
+            cell = path_map[cell]
+        return path[::-1]
+
+    def _draw_path(self, path: List[Tuple[int, int]]):
+        for i in range(len(path)-1):
+            self._cells[path[i+1][0]][path[i+1][1]].draw_move(
+                self._cells[path[i][0]][path[i][1]]
+            )
+            self._animate(0.015)
+
     def _solve_via_bfs(self):
-        que: List[Tuple[Tuple[int, int], List[Tuple[int, int]]]] = []
-        que.append(((0, 0), []))
+        path_map = {}
+        que: List[Tuple[int, int]] = []
+
+        que.append((0, 0))
         while len(que) > 0:
-            item = que.pop(0)
-            i, j = item[0][0], item[0][1]
-            path = item[1]
-            pathlen = len(path)
-            if pathlen > 0:
-                prev_cell_ind = path[pathlen-1]
-                self._cells[i][j].draw_move(
-                    self._cells[prev_cell_ind[0]][prev_cell_ind[1]],
-                    undo=True
-                )
-                self._animate(0.1)
+            i, j = que.pop(0)
+
             if i == self._num_rows - 1 and j == self._num_cols - 1:
-                self._draw_path(path + [(i, j)])
+                path = self._build_path(path_map)
+                self._draw_path(path)
                 return True
+
             self._cells[i][j].visited = True
+
             dr = [-1, 0, 1, 0]
             dc = [0, -1, 0, 1]
             for k in range(4):
@@ -217,16 +235,15 @@ class Maze:
                     and not self._cells[nr][nc].visited
                     and self.__can_move(i, j, nr, nc)
                 ):
-                    indexes = (nr, nc)
-                    que.append((indexes, path + [(i, j)]))
+                    next_cell = (nr, nc)
+                    que.append(next_cell)
+                    path_map[next_cell] = (i, j)
+                    self._cells[i][j].draw_move(
+                        self._cells[next_cell[0]][next_cell[1]],
+                        undo=True
+                    )
+                    self._animate(0.1)
         return False
-
-    def _draw_path(self, path: List[Tuple[int, int]]):
-        for i in range(len(path)-1):
-            self._cells[path[i+1][0]][path[i+1][1]].draw_move(
-                self._cells[path[i][0]][path[i][1]]
-            )
-            self._animate(0.015)
 
     def solve_bfs(self):
         return self._solve_via_bfs()
@@ -237,14 +254,6 @@ class Maze:
 
         def _h(cell1: Tuple[int, int], cell2: Tuple[int, int] = end_cell):
             return abs(cell1[0] - cell2[0]) + abs(cell1[1] - cell2[1])
-
-        def _build_path(path_map: Dict):
-            cell = end_cell
-            path: List[Tuple[int, int]] = [cell]
-            while cell != start_cell:
-                path.append(path_map[cell])
-                cell = path_map[cell]
-            return path[::-1]
 
         cells = []
         for i in range(self._num_rows):
@@ -265,7 +274,7 @@ class Maze:
             current_cell = pq.get()[2]
 
             if current_cell == end_cell:
-                path = _build_path(path_map)
+                path = self._build_path(path_map)
                 self._draw_path(path)
                 return True
 
