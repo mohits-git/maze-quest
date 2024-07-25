@@ -40,7 +40,6 @@ class Window:
             fill="x",
             expand=1
         )
-        self.__running = False
         self.__root.protocol('WM_DELETE_WINDOW', self.close)
 
     def clear_canvas(self):
@@ -51,13 +50,10 @@ class Window:
         self.__root.update()
 
     def wait_for_close(self):
-        self.__running = True
-        while self.__running:
-            self.redraw()
-        print("Closed")
+        self.__root.mainloop()
 
     def close(self):
-        self.__running = False
+        self.__root.destroy()
 
     def draw_line(self, line: Line, fill_color: str | None = None):
         color = self.color if fill_color is None else fill_color
